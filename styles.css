@@ -6,179 +6,153 @@ html {
   padding: 0;
   overflow: hidden;
   font-family: "Sour Gummy", sans-serif;
+  background: #111; /* Dark immersive background */
+  color: #eee; /* Soft text color */
 }
 
 .container {
   position: relative;
   width: 100vw;
   height: 100vh;
-
   display: flex;
   align-items: center;
+  justify-content: center;
+  overflow-x: hidden;
 }
 
-#blob-path {
-  position: relative;
+#dai-path {
   display: flex;
   align-items: center;
-  gap: 30px;
-  padding: 20px;
+  gap: 40px;
+  padding: 30px;
   height: 100vh;
-  min-width: 10000000px;
+  min-width: 20000px; /* Infinite scroll simulation */
+  overflow: visible;
+  background: radial-gradient(circle at center, #111, #000); /* Subtle gradient */
 }
 
-.blob-block {
+.dai-block {
   position: relative;
   text-align: center;
-  width: 250px;
+  width: 280px;
+  margin: 0 auto;
 }
 
 .block {
   position: relative;
   width: 250px;
   height: 250px;
-  margin: 0 auto;
-  background-color: black;
+  background: linear-gradient(145deg, #2a2a2a, #121212); /* Dark glassy effect */
   background-size: cover;
   background-position: center;
-  border: 3px solid #fff;
-  border-radius: 8px;
-  box-shadow: 0px 4px 8px rgba(255, 255, 255, 0.2);
+  border: 2px solid #444;
+  border-radius: 15px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  font-weight: bold;
+  color: #fff;
+  font-weight: 700;
+  text-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.block:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  box-shadow: 0px 8px 25px rgba(255, 69, 0, 0.5); /* Subtle orange glow */
 }
 
 .details {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  background-color: #f5f5f5;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  margin-top: 10px;
-  padding: 8px;
-  font-size: 15px;
-  color: #333;
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 10px;
+  background: rgba(50, 50, 50, 0.8);
+  color: #ddd;
+  font-size: 0.9rem;
+  line-height: 1.4;
   text-align: left;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-}
-.details div {
-  padding-radius: 4px;
-  padding-top: 4px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .read-more-btn {
   background: none;
   border: none;
-  cursor: pointer;
+  color: #48d1cc; /* Highlighted cyan */
   text-decoration: underline;
-  font-size: 0.875rem;
-}
-.read-more-btn:hover {
-  color: #1e40af; /* Tailwind text-blue-800 */
+  cursor: pointer;
 }
 
-/* Angled Blob Button Styles */
+.read-more-btn:hover {
+  color: #ff6347; /* Warning red tone */
+}
+
+/* Dynamic Button */
 .button-container {
   position: absolute;
   top: 50%;
   right: 20px;
   transform: translateY(-50%);
-  z-index: 20; /* Ensure it appears above other content */
 }
 
 .angled-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  transform: rotate(-10deg); /* Tilted appearance */
-  background-color: #ff69b4; /* Cute pink */
-  padding: 1rem 2rem;
+  transform: rotate(-15deg);
+  background-color: #1e90ff; /* Strong blue */
+  padding: 1.2rem 2.5rem;
   color: #fff;
   text-decoration: none;
+  font-size: 1rem;
   border-radius: 50px;
-  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease-in-out;
 }
 
 .angled-button:hover {
-  transform: rotate(-5deg) scale(1.05); /* Slight zoom */
-  box-shadow: 0px 8px 20px rgba(255, 105, 180, 0.5);
+  transform: rotate(-10deg) scale(1.1);
+  background-color: #ff4500; /* Intense orange tone */
+  box-shadow: 0px 8px 30px rgba(255, 69, 0, 0.7);
 }
 
-.icon {
-  margin-right: 0.5rem;
-}
-
-.icon-image {
-  width: 24px;
-  height: 24px;
-  animation: blob-bounce 1.5s infinite; /* Blob bounce effect */
-}
-
-.text {
-  font-weight: bold;
-  font-family: "Sour Gummy", sans-serif; /* Cute font */
-  text-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
-}
-
-/* Blob Bounce Animation */
-@keyframes blob-bounce {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-/* Button Styles for Each Block */
+/* Animated DAI */
 .block-button {
   position: absolute;
-  top: -60px;
-  right: -30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 85px;
-  height: 85px;
-  margin-top: 10px;
-  background-image: url("/assets/blobshape.gif"); /* Blob Shape GIF */
-  background-size: cover;
-  background-position: center;
-  border: none;
-  text-decoration: none;
+  top: -50px;
+  right: -20px;
+  width: 70px;
+  height: 70px;
+  background: url('/assets/dai-shape.gif') no-repeat center center;
+  background-size: contain;
   border-radius: 50%;
-  color: #fff;
-  font-weight: bold;
-  font-size: rem;
-
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
-.blob-text {
-  position: absolute;
-  font-family: "Sour Gummy", sans-serif; /* Cute font */
-  text-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+.block-button:hover {
+  transform: scale(1.2);
+  box-shadow: 0px 6px 20px rgba(255, 255, 255, 0.5);
 }
 
-#blob-path::before {
+.dai-text {
+  font-family: "Sour Gummy", sans-serif;
+  text-shadow: 0px 3px 10px rgba(0, 0, 0, 0.6);
+}
+
+#dai-path::before {
   content: "";
   position: absolute;
   top: 50%;
   left: 0;
   right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, #ff69b4, #6a5acd, #48d1cc);
-  background-size: 300%;
+  height: 4px;
+  background: linear-gradient(to right, #6a5acd, #ff69b4, #48d1cc);
+  background-size: 200%;
   z-index: -1;
-  animation: gradient-move 5s infinite linear;
+  animation: gradient-scroll 5s infinite linear;
 }
 
-@keyframes gradient-move {
+/* Gradient Scroll Animation */
+@keyframes gradient-scroll {
   0% {
     background-position: 0% 50%;
   }
@@ -193,8 +167,8 @@ html {
   bottom: 10px;
   left: 10px;
   right: 10px;
-  height: 10px;
-  background: rgba(255, 255, 255, 0.2); /* Light background */
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 5px;
   overflow: hidden;
 }
@@ -203,14 +177,25 @@ html {
   position: absolute;
   top: 0;
   left: 0;
-  width: 50px; /* Initial thumb width */
+  width: 50px;
   height: 100%;
-  background: rgba(255, 255, 255, 0.8); /* Thumb color */
+  background: rgba(255, 255, 255, 0.8);
   border-radius: 5px;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background 0.3s ease-in-out;
 }
 
 .scroll-thumb:hover {
-  background: rgba(255, 255, 255, 1); /* Highlighted thumb color */
+  background: rgba(255, 255, 255, 1);
+}
+
+/* DAI Animation */
+@keyframes dai-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
