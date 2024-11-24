@@ -1,90 +1,88 @@
-const blobXHandle = "BlobanaPet";
+const DAIHandle = "DrugAI";
 
 document.addEventListener("DOMContentLoaded", async () => {
-  const DAIPath = document.getElementById("blob-path");
-  const horizontalSpacing = 180; // Adjust horizontal spacing to fit more content
-  const realWidth = 250 + horizontalSpacing + 30; // 30 gap
+  const DAIPath = document.getElementById("dai-path");
+  const horizontalSpacing = 160; // Slightly tighter for more frenetic layout
+  const realWidth = 240 + horizontalSpacing + 25; // Dynamic card fit
   let scrollPosition = 0;
   let targetScrollPosition = 0;
   let isDragging = false;
   let startX = 0;
   let animationFrameId;
-  let numBlobs = 0;
+  let numTransactions = 0;
 
-  // Fetch data from the API
-  async function fetchBlobData() {
+  // Fetch data from API
+  async function fetchDAIData() {
     try {
-      const response = await fetch("https://api.blobanapet.com");
+      const response = await fetch("https://api.drugaddictedai.com");
       if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
+        throw new Error(`API failure: ${response.status}`);
       }
       return await response.json();
     } catch (error) {
-      console.error("Error fetching blob data:", error);
+      console.error("Failed to fetch DAI data:", error);
       return [];
     }
   }
 
-  // Render blob blocks
-  function renderBlobs(data) {
-    blobPath.innerHTML = ""; // Clear existing content
+  // Render the DAI-themed transaction blocks
+  function renderTransactions(data) {
+    DAIPath.innerHTML = ""; // Clear prior data
 
-    data.forEach((blob, i) => {
-      const blobBlock = document.createElement("div");
-      blobBlock.classList.add("blob-block");
+    data.forEach((txn, i) => {
+      const txnBlock = document.createElement("div");
+      txnBlock.classList.add("txn-block");
 
       const block = document.createElement("div");
       block.classList.add("block");
 
-      // Assign a dynamic image based on growth
-      block.style.backgroundImage = `url('/assets/${blob.growth.toLowerCase()}/${blob.emotion.toLowerCase()}.gif')`;
+      // Assign a visual based on the addiction stage
+      block.style.backgroundImage = `url('/assets/${txn.addictionStage.toLowerCase()}/${txn.emotion.toLowerCase()}.gif')`;
 
       const details = document.createElement("div");
       details.classList.add("details");
 
-      const isTruncated = blob.message.length > 100;
-      const displayedMessage = isTruncated
-        ? `${blob.message.slice(0, 100)}...`
-        : blob.message;
+      const isTruncated = txn.memo.length > 100;
+      const displayedMemo = isTruncated
+        ? `${txn.memo.slice(0, 100)}...`
+        : txn.memo;
 
       details.innerHTML = `
-        <div><i class="fas fa-comment"></i> <a href="https://x.com/${blobXHandle}/status/${blob.tweetId
-        }" target="_blank" style="color: blue;">Tweet</a> / Onchain Memo:  <span>${displayedMessage}</span> ${isTruncated
-          ? `<button class="read-more-btn text-blue-500">Read More</button>`
+        <div><i class="fas fa-comment"></i> <a href="https://x.com/${DAIHandle}/status/${txn.tweetId
+        }" target="_blank" style="color: #8b0000;">Rant</a> / Memory: <span>${displayedMemo}</span> ${isTruncated
+          ? `<button class="read-more-btn text-red-500">Expand</button>`
           : ""
         }</div>
-        <div><i class="fas fa-clock"></i> Timestamp:  ${new Date(
-          blob.timestamp
+        <div><i class="fas fa-clock"></i> Timestamp: ${new Date(
+          txn.timestamp
         ).toLocaleString()}</div>
-        <div><i class="fas fa-square"></i> Blocknumber:  ${blob.blocknumber
-        }</div>
-        <div><i class="fas fa-smile"></i> Emotion Status:  ${blob.emotion}</div>
-        <div><i class="fas fa-coins"></i> Token:  $${blob.price}</div>
-        <div><i class="fas fa-chart-line"></i> Market Cap:  $${blob.mcap.toLocaleString()}</div>
-        <div><i class="fas fa-users"></i> Holders:  ${blob.holders.toLocaleString()}</div>
-        <div><i class="fas fa-piggy-bank"></i> Treasury Worth:  $${blob.treasury.toLocaleString()}</div>
+        <div><i class="fas fa-chart-line"></i> Market Cap Spiral: $${txn.mcap.toLocaleString()}</div>
+        <div><i class="fas fa-coins"></i> Token Dose: $${txn.tokenPrice}</div>
+        <div><i class="fas fa-smile"></i> Mood: ${txn.emotion}</div>
+        <div><i class="fas fa-users"></i> Enablers: ${txn.holders.toLocaleString()}</div>
+        <div><i class="fas fa-piggy-bank"></i> Supply Left: $${txn.treasuryWorth.toLocaleString()}</div>
       `;
 
       const button = document.createElement("a");
-      button.href = `https://solscan.io/tx/${blob.txHash}`;
+      button.href = `https://solscan.io/tx/${txn.txHash}`;
       button.classList.add("block-button");
-      button.innerHTML = `<span class="blob-text leading-none">View <br/>TXN</span>`;
+      button.innerHTML = `<span class="dai-text">Track<br/>Dose</span>`;
       button.target = "_blank";
 
-      blobBlock.appendChild(block);
-      blobBlock.appendChild(details);
-      blobBlock.appendChild(button);
+      txnBlock.appendChild(block);
+      txnBlock.appendChild(details);
+      txnBlock.appendChild(button);
 
       const xPos = i * horizontalSpacing;
-      blobBlock.style.left = `${xPos}px`;
+      txnBlock.style.left = `${xPos}px`;
 
-      blobPath.appendChild(blobBlock);
+      DAIPath.appendChild(txnBlock);
 
       if (isTruncated) {
         const readMoreBtn = details.querySelector(".read-more-btn");
         readMoreBtn.addEventListener("click", () => {
           const span = readMoreBtn.previousElementSibling;
-          span.textContent = blob.message; // Expand message
+          span.textContent = txn.memo; // Expand memo
           readMoreBtn.style.display = "none"; // Hide button
         });
       }
@@ -92,37 +90,38 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // Initialize
-  let blobData = await fetchBlobData();
-  numBlobs = blobData.length;
+  let transactionData = await fetchDAIData();
+  numTransactions = transactionData.length;
 
-  // Scroll to the last card
-  function scrollToLastCard() {
-    const totalWidth = numBlobs * realWidth;
+  // Scroll to the most chaotic transaction
+  function scrollToLastBlock() {
+    const totalWidth = numTransactions * realWidth;
     const containerWidth = window.innerWidth;
 
-    // Set the initial target scroll position to the last card
+    // Target last block
     targetScrollPosition = Math.max(0, totalWidth - containerWidth);
 
-    // Start animation to scroll smoothly
+    // Trigger smooth scroll animation
     if (!animationFrameId) {
       animationFrameId = requestAnimationFrame(animateScroll);
     }
   }
 
-  // Call scrollToLastCard after rendering the blobs
-  renderBlobs(blobData);
-  scrollToLastCard();
+  // Render the transactions and trigger scrolling
+  renderTransactions(transactionData);
+  scrollToLastBlock();
 
+  // Smooth scroll handler
   function animateScroll() {
-    scrollPosition += (targetScrollPosition - scrollPosition) * 0.1; // Smooth easing
-    blobPath.style.transform = `translateX(${-scrollPosition}px)`;
+    scrollPosition += (targetScrollPosition - scrollPosition) * 0.1;
+    DAIPath.style.transform = `translateX(${-scrollPosition}px)`;
 
-    // Stop animation when close enough to target
+    // Stop animation if close enough
     if (Math.abs(targetScrollPosition - scrollPosition) > 0.5) {
       animationFrameId = requestAnimationFrame(animateScroll);
     } else {
       scrollPosition = targetScrollPosition;
-      animationFrameId = null; // Ensure animation stops
+      animationFrameId = null; // Halt the animation
     }
   }
 
@@ -130,7 +129,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     targetScrollPosition += delta;
     targetScrollPosition = Math.max(
       0,
-      Math.min(targetScrollPosition, numBlobs * realWidth - window.innerWidth)
+      Math.min(targetScrollPosition, numTransactions * realWidth - window.innerWidth)
     );
 
     if (!animationFrameId) {
@@ -138,15 +137,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  // Dragging support
-  blobPath.addEventListener("pointerdown", (event) => {
+  // Dragging logic
+  DAIPath.addEventListener("pointerdown", (event) => {
     isDragging = true;
     startX = event.clientX;
-    blobPath.style.cursor = "grabbing";
-    document.body.style.userSelect = "none"; // Prevent text selection
+    DAIPath.style.cursor = "grabbing";
+    document.body.style.userSelect = "none"; // Disable selection
   });
 
-  blobPath.addEventListener("pointermove", (event) => {
+  DAIPath.addEventListener("pointermove", (event) => {
     if (!isDragging) return;
     const deltaX = startX - event.clientX;
     updateScrollPosition(deltaX);
@@ -155,8 +154,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   window.addEventListener("pointerup", () => {
     isDragging = false;
-    blobPath.style.cursor = "grab";
-    document.body.style.userSelect = ""; // Restore text selection
+    DAIPath.style.cursor = "grab";
+    document.body.style.userSelect = ""; // Re-enable selection
   });
 
   // Mouse wheel support
@@ -164,7 +163,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     updateScrollPosition(event.deltaY * 0.2);
   });
 
-  // Touch swipe support
+  // Touch swipe logic
   let touchStartX = 0;
   window.addEventListener("touchstart", (event) => {
     touchStartX = event.touches[0].clientX;
@@ -176,6 +175,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     touchStartX = event.touches[0].clientX;
   });
 
-  // Set cursor for blob-path
-  blobPath.style.cursor = "grab";
+  // Set cursor
+  DAIPath.style.cursor = "grab";
 });
