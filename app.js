@@ -1,7 +1,7 @@
 const blobXHandle = "BlobanaPet";
 
 document.addEventListener("DOMContentLoaded", async () => {
-  const blobPath = document.getElementById("blob-path");
+  const DAIPath = document.getElementById("blob-path");
   const horizontalSpacing = 180; // Adjust horizontal spacing to fit more content
   const realWidth = 250 + horizontalSpacing + 30; // 30 gap
   let scrollPosition = 0;
